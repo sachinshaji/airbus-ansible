@@ -1,0 +1,32 @@
+---
+- hosts: airbus-instance 
+  become: true
+  tasks:
+
+    - name: install java8 in airbus-instance
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+
+    - name: Ensure Jenkins repository is added
+      yum_repository:
+        name: jenkins-ci
+        description: jenkins-ci package repository
+        baseurl: http://pkg.jenkins.io/redhat
+        gpgkey: https://pkg.jenkins.io/redhat/jenkins.io.key
+        gpgcheck: yes
+
+    - name: Ensure gpp key is imported
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat/jenkins.io.key
+        
+    - name: Ensure Jenkins and java-devel package installed
+      yum:
+        name: '{{ packages }}'
+        state: present
+        update_cache: true
+      vars:
+        packages:
+          - jenkins
+
