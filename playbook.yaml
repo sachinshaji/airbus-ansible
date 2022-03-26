@@ -29,4 +29,8 @@
       vars:
         packages:
           - jenkins
-
+        
+    - name: Start jenkins service
+      systemd:
+        state: started
+        name: jenkins
